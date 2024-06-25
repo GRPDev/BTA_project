@@ -1,5 +1,6 @@
 from FileManager import FileManager
 from HistoryMessages import HistoryMessages
+import json
 
 class Account:
     def __init__(self, balance = 0):
@@ -17,37 +18,38 @@ class Account:
         # self.file_manager 
 
     def deposit(self, amount):
-        pass
-        # TODO:
-        # implement the deposit process with all necessary checks
-        # amount must be a integer greater than 0
-        
-        # in case of a positive outcome, use this construct to write it to a JSON file
-
-        # history_message = HistoryMessages.deposit("success", amount, self.balance)
-        # self.write_to_history(history_message)
-
-        # in case of a negative outcome, use this construct to write to the JSON file
-            
-        # history_message = HistoryMessages.deposit("failure", amount, self.balance)
-        # self.write_to_history(history_message)
+        try:
+            deposit_amount = int(amount)
+            if deposit_amount > 0:
+                self.balance += amount
+                history_message = HistoryMessages.deposit("success", amount, self.balance)
+                self.write_to_history(history_message)
+            elif deposit_amount <= 0:
+                history_message = HistoryMessages.deposit("failure", amount, self.balance)
+                self.write_to_history(history_message)
+                raise ValueError("Invalid amount for deposit!")
+        except Exception:
+            history_message = HistoryMessages.deposit("failure", amount, self.balance)
+            self.write_to_history(history_message)
+            raise Exception("Invalid amount for deposit!")
 
     def debit(self, amount):
-        pass
-        # TODO:
-        # implement account debits with all necessary checks
-        # amount must be a integer greater than 0
-        # if amount is greater than the amount in the account (insufficient funds) the operation should not work
-
-        # in case of positive outcome use this construct to write to JSON file
-
-        # history_message = HistoryMessages.debit("success", amount, self.balance)
-        # self.write_to_history(history_message)
-
-        # in case of a negative outcome, use this construct to write to a JSON file
-        
-        # history_message = HistoryMessages.debit("failure", amount, self.balance)
-        # self.write_to_history(history_message)
+        try:
+            debit_amount = int(amount)
+            if debit_amount > 0 and self.balance > debit_amount:
+                self.balance -= amount
+                history_message = HistoryMessages.debit("success", amount, self.balance)
+                self.write_to_history(history_message)
+            elif debit_amount > 0 and self.balance < debit_amount:
+                print("Invalid amount for debit!")
+                history_message = HistoryMessages.debit("failure", amount, self.balance)
+                self.write_to_history(history_message)
+            elif debit_amount <= 0:
+                print("Invalid amount for debit!")
+                history_message = HistoryMessages.debit("failure", amount, self.balance)
+                self.write_to_history(history_message)
+        except Exception:
+            raise Exception("Invalid amount for debit!") 
 
     def get_balance(self):
         return self.balance
@@ -58,9 +60,11 @@ class Account:
         else:
             return f'type: {dict["operation_type"]} status: {dict["status"]} pre exchange amount: {dict["pre_exchange_amount"]} exchange amount: {dict["exchange_amount"]} currency from: {dict["currency_from"]} currency to: {dict["currency_to"]}'
         
-
     def get_history(self):
-        pass
+        with open(self.hist_file_path, "r") as file:
+            data = json.load(file)
+            for i in data:
+                self.dict_to_string(i)
         # TODO:
         # implement a process that returns transaction history line by line
         # use the dict_to_string method to create a string from a dictionary
