@@ -21,18 +21,19 @@ class Account:
     def deposit(self, amount):
         try:
             deposit_amount = int(amount)
-            if deposit_amount > 0:
-                self.balance += amount
-                history_message = HistoryMessages.deposit("success", amount, self.balance)
-                self.write_to_history(history_message)
-            elif deposit_amount <= 0:
+            if deposit_amount <= 0:
                 history_message = HistoryMessages.deposit("failure", amount, self.balance)
                 self.write_to_history(history_message)
-                raise ValueError("Invalid amount for deposit!")
+                print("Invalid amount for deposit!")
+            if deposit_amount > 0:
+                self.balance += deposit_amount
+                history_message = HistoryMessages.deposit("success", amount, self.balance)
+                self.write_to_history(history_message)
         except Exception:
             history_message = HistoryMessages.deposit("failure", amount, self.balance)
             self.write_to_history(history_message)
-            raise Exception("Invalid amount for deposit!")
+            print("Invalid amount for deposit!")
+            return
 
     def debit(self, amount):
         try:
@@ -50,7 +51,8 @@ class Account:
                 history_message = HistoryMessages.debit("failure", amount, self.balance)
                 self.write_to_history(history_message)
         except Exception:
-            raise Exception("Invalid amount for debit!") 
+            print('Invalid amount for debit!')
+            return
 
     def get_balance(self):
         return self.balance
@@ -66,6 +68,3 @@ class Account:
             data = json.load(file)
             for i in data:
                 self.dict_to_string(i)
-        # TODO:
-        # implement a process that returns transaction history line by line
-        # use the dict_to_string method to create a string from a dictionary
