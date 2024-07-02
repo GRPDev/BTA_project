@@ -22,5 +22,4 @@ class FileManager:
     def add_to_json(self, data, json_file_path):
         data_in_json = self.read_json(json_file_path)
         data_in_json.append(data)
-        self.write_json(data_in_json, json_file_path)  
-            
+        self.write_json(data_in_json, json_file_path) 
