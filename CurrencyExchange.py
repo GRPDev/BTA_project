@@ -1,6 +1,6 @@
 from FileManager import FileManager
 from HistoryMessages import HistoryMessages
-import request
+import requests
 
 class CurrencyExchange:
     def __init__(self, balance = 0):
