@@ -39,7 +39,7 @@ class Account:
         try:
             debit_amount = int(amount)
             if debit_amount > 0 and self.balance > debit_amount:
-                self.balance -= amount
+                self.balance -= debit_amount
                 history_message = HistoryMessages.debit("success", amount, self.balance)
                 self.write_to_history(history_message)
             elif debit_amount > 0 and self.balance < debit_amount:
@@ -67,4 +67,5 @@ class Account:
         with open(self.hist_file_path, "r") as file:
             data = json.load(file)
             for i in data:
-                self.dict_to_string(i)
+                print(self.dict_to_string(i))
+        return
