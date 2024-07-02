@@ -18,7 +18,7 @@ def main():
             deposit_amount = input("Enter deposit amount: ")
             user_account.deposit(deposit_amount)
         elif choice == "3":
-            withdraw_amount = input("Enter deposit amount: ")
+            withdraw_amount = input("Enter withdraw amount: ")
             user_account.debit(withdraw_amount)
         elif choice == "4":
             history = user_account.get_history()
@@ -26,9 +26,9 @@ def main():
         elif choice == "5":
             available_currency = " ".join(exchange.get_exchange_rates().keys())
             print(f"Select a currency from the available currencies: {available_currency}")
-            source_currency = input("Enter source currency: ")
-            target_currency = input("Enter target currency: ")
-            exchange_amount = input("Enter target currency: ")
+            source_currency = input("Enter source currency (USE UPPERCASE): ")
+            target_currency = input("Enter target currency (USE UPPERCASE): ")
+            exchange_amount = input("Enter exchange amount: ")
 
             result = exchange.exchange_currency(source_currency, target_currency, exchange_amount)
             if result is not None:
